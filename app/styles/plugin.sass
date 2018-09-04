@@ -194,17 +194,33 @@ $timetable-background-color: white !default
 		height: $timetable-hour-row-height - 1px
 		display: block
 		position: absolute
-		z-index: 2
-		padding: 0 $timetable-entry-padding
+		z-index: 100
 		white-space: normal
-		overflow: hidden
+		overflow: visible
 		color: white
-		border: $timetable-entry-border
 		+valign-parent
 		small
 			+valign-middle
+			padding: 0 $timetable-entry-padding
 			display: block
-
+		.description
+			position: absolute
+			top: 0
+			left: 0
+			overflow: visible
+			width: 100%
+			display: none
+			background-color: $timetable-entry-color-hover
+			z-index: 100
+			min-width: 150px
+			padding: 0 $timetable-entry-padding
+			h5
+				padding: 0
 		&:hover
 			background-color: $timetable-entry-color-hover
+			z-index: 5000
+			small
+				display: none
+			.description
+				display: block
 

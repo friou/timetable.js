@@ -195,6 +195,10 @@ Timetable.Renderer = function(tt) {
 				var elementType = hasURL ? 'a' : 'span';
 				var eventNode = node.appendChild(document.createElement(elementType));
 				var smallNode = eventNode.appendChild(document.createElement('small'));
+                var descriptionNode = eventNode.appendChild(document.createElement('span'));
+                var titleDescriptionNode = descriptionNode.appendChild(document.createElement('h5'));
+                var paraDescriptionNode = descriptionNode.appendChild(document.createElement('p'));
+                descriptionNode.classList.add('description');
 				eventNode.title = event.name;
 
 				if (hasURL) {
@@ -214,9 +218,11 @@ Timetable.Renderer = function(tt) {
         }
 
 				eventNode.className = hasAdditionalClass ? 'time-entry ' + event.options.class : 'time-entry';
+                smallNode.textContent = event.name;
+                titleDescriptionNode.textContent = event.name;
+                paraDescriptionNode.textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vulputate sagittis dui, eget porta enim tristique vel...';
 				eventNode.style.width = computeEventBlockWidth(event);
 				eventNode.style.left = computeEventBlockOffset(event);
-				smallNode.textContent = event.name;
 			}
 			function computeEventBlockWidth(event) {
 				var start = event.startDate;
