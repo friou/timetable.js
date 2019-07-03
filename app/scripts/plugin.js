@@ -34,7 +34,7 @@ Timetable.Renderer = function(tt) {
 	}
 	function locationExistsIn(loc, locs) {
 		return locs.findIndex(function(l){
-           return l.id === loc;
+			return l.id === loc;
 		}) !== -1;
 	}
 	function isValidTimeRange(start, end) {
@@ -81,25 +81,25 @@ Timetable.Renderer = function(tt) {
 
 			return this;
 		},
-        addLocation: function(newLocation) {
-            function hasProperFormat() {
-                return newLocation instanceof Object;
-            }
+		addLocation: function(newLocation) {
+			function hasProperFormat() {
+				return newLocation instanceof Object;
+			}
 
-            var existingLocations = this.locations;
+			var existingLocations = this.locations;
 
-            if (hasProperFormat()) {
-            	if (!locationExistsIn(newLocation, existingLocations)) {
-            		existingLocations.push(newLocation);
-            	} else {
-            		throw new Error('Location already exists');
-            	}
-            } else {
-                throw new Error('Tried to add locations in wrong format');
-            }
+			if (hasProperFormat()) {
+				if (!locationExistsIn(newLocation, existingLocations)) {
+					existingLocations.push(newLocation);
+				} else {
+					throw new Error('Location already exists');
+				}
+			} else {
+				throw new Error('Tried to add locations in wrong format');
+			}
 
-            return this;
-        },
+			return this;
+		},
 		addEvent: function(name, location, start, end, options) {
 			if (!locationExistsIn(location, this.locations)) {
 				console.log(location);
@@ -131,19 +131,19 @@ Timetable.Renderer = function(tt) {
 
 	function prettyFormatHour(hour, usingTwelveHour) {
 		var prettyHour;
-			if(usingTwelveHour) {
-					var period = hour >= 12 ? 'PM':'AM';
-					prettyHour = ((hour + 11) % 12 + 1) + ':00' + period;
-			} else {
-					var prefix = hour < 10 ? '0' : '';
-					prettyHour = prefix + hour + ':00';
-			}
+		if(usingTwelveHour) {
+			var period = hour >= 12 ? 'PM':'AM';
+			prettyHour = ((hour + 11) % 12 + 1) + ':00' + period;
+		} else {
+			var prefix = hour < 10 ? '0' : '';
+			prettyHour = prefix + hour + ':00';
+		}
 		return prettyHour;
 	}
 
 	Timetable.Renderer.prototype = {
 		draw: function(selector) {
-      var timetable = this.timetable;
+			var timetable = this.timetable;
 
 			function checkContainerPrecondition(container) {
 				if (container === null) {
@@ -164,18 +164,18 @@ Timetable.Renderer = function(tt) {
 				}
 			}
 			function appendTimetableSection(container) {
-        var sectionNode = container.appendChild(document.createElement('section'));
+				var sectionNode = container.appendChild(document.createElement('section'));
 				var headerNode = appendColumnHeaders(sectionNode);
 				var timeNode = sectionNode.appendChild(document.createElement('time'));
-        timeNode.className = 'syncscroll';
-        timeNode.setAttribute('name', 'scrollheader');
-        var width = headerNode.firstChild.offsetWidth + 'px';
+				timeNode.className = 'syncscroll';
+				timeNode.setAttribute('name', 'scrollheader');
+				var width = headerNode.firstChild.offsetWidth + 'px';
 				appendTimeRows(timeNode, width);
 			}
 			function appendColumnHeaders(node) {
 				var headerNode = node.appendChild(document.createElement('header'));
 				headerNode.className = 'syncscroll';
-        headerNode.setAttribute('name', 'scrollheader');
+				headerNode.setAttribute('name', 'scrollheader');
 				var headerULNode = headerNode.appendChild(document.createElement('ul'));
 
 				var completed = false;
@@ -199,7 +199,7 @@ Timetable.Renderer = function(tt) {
 			}
 			function appendTimeRows(node, width) {
 				var ulNode = node.appendChild(document.createElement('ul'));
-        ulNode.style.width = width;
+				ulNode.style.width = width;
 				ulNode.className = 'room-timeline';
 				for (var k=0; k<timetable.locations.length; k++) {
 					var liNode = ulNode.appendChild(document.createElement('li'));
@@ -229,8 +229,8 @@ Timetable.Renderer = function(tt) {
 				var eventNode = node.appendChild(document.createElement(elementType));
 				var nameNode = eventNode.appendChild(document.createElement('small'));
 				nameNode.classList.add('name');
-                var hourNode = eventNode.appendChild(document.createElement('small'));
-                hourNode.classList.add('hours');
+				var hourNode = eventNode.appendChild(document.createElement('small'));
+				hourNode.classList.add('hours');
 				eventNode.title = event.name;
 
 				if (hasURL) {
@@ -244,16 +244,16 @@ Timetable.Renderer = function(tt) {
 				}
 
 				if (hasClickHandler) {
-				  eventNode.addEventListener('click', function(e) {
-				    event.options.onClick(event, timetable, e);
-          });
-        }
+					eventNode.addEventListener('click', function(e) {
+						event.options.onClick(event, timetable, e);
+					});
+				}
 
 				eventNode.className = hasAdditionalClass ? 'time-entry ' + event.options.class : 'time-entry';
 				eventNode.style.width = computeEventBlockWidth(event);
 				eventNode.style.left = computeEventBlockOffset(event);
-                nameNode.textContent = event.name;
-                hourNode.textContent = ('0' + event.startDate.getHours()).substr(-2) + ':' + ('0' + event.startDate.getMinutes()).substr(-2) + ' - ' + ('0' + event.endDate.getHours()).substr(-2) + ':' + ('0' + event.endDate.getMinutes()).substr(-2);
+				nameNode.textContent = event.name;
+				hourNode.textContent = ('0' + event.startDate.getHours()).substr(-2) + ':' + ('0' + event.startDate.getMinutes()).substr(-2) + ' - ' + ('0' + event.endDate.getHours()).substr(-2) + ':' + ('0' + event.endDate.getMinutes()).substr(-2);
 			}
 			function computeEventBlockWidth(event) {
 				var start = event.startDate;
