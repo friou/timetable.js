@@ -7,7 +7,6 @@ var Timetable = function() {
 		hourStart: 9,
 		hourEnd: 17
 	};
-	this.usingTwelveHour = false;
 	this.locations = [];
 	this.events = [];
 };
@@ -34,7 +33,7 @@ Timetable.Renderer = function(tt) {
 	}
 	function locationExistsIn(loc, locs) {
 		return locs.findIndex(function(l){
-           return l.id === loc;
+			return l.id === loc;
 		}) !== -1;
 	}
 	function isValidTimeRange(start, end) {
@@ -42,8 +41,21 @@ Timetable.Renderer = function(tt) {
 		var correctOrder = start < end;
 		return correctTypes && correctOrder;
 	}
-	function getDurationHours(startHour, endHour) {
+	function getEventDurationHours(startHour, endHour) {
 		return endHour >= startHour ? endHour - startHour : 24 + endHour - startHour;
+	}
+
+	function getDurationHours(startHour, endHour) {
+		var duration = 0;
+		if (endHour > startHour) {
+			duration =  endHour - startHour;
+		}
+		else if (startHour === endHour) {
+			duration = 24;
+		} else {
+			duration = 24 + endHour - startHour;
+		}
+		return duration;
 	}
 
 	Timetable.prototype = {
@@ -56,9 +68,6 @@ Timetable.Renderer = function(tt) {
 			}
 
 			return this;
-		},
-		useTwelveHour: function(){
-			this.usingTwelveHour = true;
 		},
 		addLocations: function(newLocations) {
 			function hasProperFormat() {
@@ -129,16 +138,9 @@ Timetable.Renderer = function(tt) {
 		}
 	}
 
-	function prettyFormatHour(hour, usingTwelveHour) {
-		var prettyHour;
-			if(usingTwelveHour) {
-					var period = hour >= 12 ? 'PM':'AM';
-					prettyHour = ((hour + 11) % 12 + 1) + ':00' + period;
-			} else {
-					var prefix = hour < 10 ? '0' : '';
-					prettyHour = prefix + hour + ':00';
-			}
-		return prettyHour;
+	function prettyFormatHour(hour) {
+		var prefix = hour < 10 ? '0' : '';
+		return prefix + hour + ':00';
 	}
 
 	Timetable.Renderer.prototype = {
@@ -185,7 +187,7 @@ Timetable.Renderer = function(tt) {
 					var liNode = headerULNode.appendChild(document.createElement('li'));
 					var spanNode = liNode.appendChild(document.createElement('span'));
 					spanNode.className = 'time-label';
-					spanNode.textContent = prettyFormatHour(hour, timetable.usingTwelveHour);
+					spanNode.textContent = prettyFormatHour(hour);
 
 					if (hour === timetable.scope.hourEnd && (timetable.scope.hourStart !== timetable.scope.hourEnd || looped)) {
 						completed = true;
@@ -267,7 +269,7 @@ Timetable.Renderer = function(tt) {
 			function computeEventBlockOffset(event) {
 				var scopeStartHours = timetable.scope.hourStart;
 				var eventStartHours = event.startDate.getHours() + (event.startDate.getMinutes() / 60);
-				var hoursBeforeEvent =  getDurationHours(scopeStartHours, eventStartHours);
+				var hoursBeforeEvent =  getEventDurationHours(scopeStartHours, eventStartHours);
 				return hoursBeforeEvent / scopeDurationHours * 100 + '%';
 			}
 
